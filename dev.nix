@@ -6,12 +6,12 @@
 
 mkDerivation rec{
   name = "koi";
-  
+
   src = ./src;
 
   nativeBuildInputs = [ cmake ];
-  
+
   buildInputs = [ wrapQtAppsHook kcoreaddons kwidgetsaddons kconfig ];
-  
-  sourceRoot = "source/src";
+
+  # sourceRoot = "source/src";
 } 

@@ -3,3 +3,4 @@ src/build
 *.user
 *.autosave
 .vscode
+result
