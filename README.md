@@ -66,7 +66,18 @@ These instructions also apply to building the latest release version of Koi. Ins
 
 **Building with NIX**
 
-`nix-build -E 'with import <nixpkgs> {}; pkgs.libsForQt5.callPackage ./dev.nix {}'`
+There are to ways of building this project using NIX. The first is to use the legacy `nix-build` command together with the `dev.nix` file. The second is to use [nix flakes](https://nixos.wiki/wiki/Flakes), which are, as of the time of writing, still experimental.
+
+To use the legacy method, run the following command in the root of the project:
+
+```bash
+nix-build -E 'with import <nixpkgs> {}; pkgs.libsForQt5.callPackage ./dev.nix {}'
+```
+To build the project with flakes, run the following command in the root of the project:
+
+```bash
+nix build
+```
 
 ## Downloads
 
@@ -101,10 +112,42 @@ Available from [copr](https://copr.fedorainfracloud.org/coprs/birkch/Koi/). Pack
 
 ### NixOS and distros with nix.
 
-**Download**
+**NUR**
 
 Available from me [NUR](https://nur.nix-community.org/repos/baduhai/) repo. Packaged by yours truly.  
 Install to your NIX profile with `nix-env -iA koi -f https://github.com/baduhai/nur/tarball/master`, to add to you nixos configuration, follow the [Instructions](https://github.com/nix-community/nur#installation) on the NUR repo.
+
+**Nix Flake installation**
+
+If you have flakes enabled (see here for a guide and further information about what flakes are: [https://nixos.wiki/wiki/Flakes](https://nixos.wiki/wiki/Flakes)), you can add Koi to your system by adding this repository as an input to your `flake.nix`:
+
+```nix
+{
+  # 1. Add Koi as an input
+  # NOTE: After this PR has been merged, you may use the upstream repo `"github:baduhai/Koi";` instead.
+  inputs.koi.url = "github:Quoteme/Koi-custom-script";
+  # 2. Add the Koi-input to your outputs
+  outputs = { self, koi }: {
+    # ...
+    # 3. Add Koi to your `environment.systemPackages`!
+    environment.systemPackages = [
+      # ...
+    koi.defaultPackage.x86_64-linux
+    ]
+  };
+}
+```
+
+Then, you will have Koi installed after running `nixos-rebuild switch`.
+
+**Nix Flake shell**
+
+You can temporarily enter a Nix shell with Koi available, if you have flakes enabled, by running:
+
+```bash
+# NOTE: After this PR has been merged, you may use the upstream repo `github:baduhai/Koi` instead.
+nix shell github:quoteme/st-nix
+```
 
 ### Debian/Ubuntu
 
